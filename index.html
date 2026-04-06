@@ -170,15 +170,15 @@
                 </div>
                 <textarea id="p-desc" class="input-candy" placeholder="Descripción breve..." style="height:60px;"></textarea>
                 
-                <p style="font-size:0.75rem; margin:15px 0 5px; color:var(--candy-sand); font-weight:bold; letter-spacing:1px;">Inventario por talla:</p>
-                <div class="stock-form-grid" style="margin-top:5px; padding:10px; gap:5px;">
-                    <input type="number" id="p-s" class="input-candy" placeholder="S">
-                    <input type="number" id="p-m" class="input-candy" placeholder="M">
-                    <input type="number" id="p-l" class="input-candy" placeholder="L">
-                    <input type="number" id="p-xl" class="input-candy" placeholder="XL">
-                    <input type="number" id="p-2xl" class="input-candy" placeholder="2XL">
-                    <input type="number" id="p-3xl" class="input-candy" placeholder="3XL">
-                    <input type="number" id="p-os" class="input-candy" placeholder="ONE SIZE (Única)" style="grid-column: span 3; font-weight:700;">
+                <p style="font-size:0.75rem; margin:15px 0 5px; color:var(--candy-sand); font-weight:bold; letter-spacing:1px;">Tallas disponibles:</p>
+                <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:8px; margin-top:5px; background:#FDF8F2; padding:12px; border-radius:15px; border:1px solid #E6DED5;">
+                    <div class="size-chip" id="chip-s" onclick="toggleSizeChip('chip-s')">S</div>
+                    <div class="size-chip" id="chip-m" onclick="toggleSizeChip('chip-m')">M</div>
+                    <div class="size-chip" id="chip-l" onclick="toggleSizeChip('chip-l')">L</div>
+                    <div class="size-chip" id="chip-xl" onclick="toggleSizeChip('chip-xl')">XL</div>
+                    <div class="size-chip" id="chip-2xl" onclick="toggleSizeChip('chip-2xl')">2XL</div>
+                    <div class="size-chip" id="chip-3xl" onclick="toggleSizeChip('chip-3xl')">3XL</div>
+                    <div class="size-chip full-width" id="chip-os" onclick="toggleSizeChip('chip-os')">ONE SIZE</div>
                 </div>
                 
                 <p style="font-size:0.75rem; margin-top:15px; font-weight:600;">Sube las fotos (puedes seleccionar varias):</p>
@@ -299,18 +299,23 @@
             track.scrollTo({ left: track.offsetWidth * currentImgIndex, behavior: 'smooth' });
         }
 
+        function toggleSizeChip(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('active');
+        }
+
         // --- SUBIR PRODUCTO NUEVO ---
         async function saveProduct() {
             const name = document.getElementById('p-name').value;
             const price = parseFloat(document.getElementById('p-price').value);
             const stocks = { 
-                S: parseInt(document.getElementById('p-s').value)||0, 
-                M: parseInt(document.getElementById('p-m').value)||0, 
-                L: parseInt(document.getElementById('p-l').value)||0,
-                XL: parseInt(document.getElementById('p-xl').value)||0,
-                '2XL': parseInt(document.getElementById('p-2xl').value)||0,
-                '3XL': parseInt(document.getElementById('p-3xl').value)||0,
-                OS: parseInt(document.getElementById('p-os').value)||0
+                S:   document.getElementById('chip-s').classList.contains('active') ? 1 : 0,
+                M:   document.getElementById('chip-m').classList.contains('active') ? 1 : 0,
+                L:   document.getElementById('chip-l').classList.contains('active') ? 1 : 0,
+                XL:  document.getElementById('chip-xl').classList.contains('active') ? 1 : 0,
+                '2XL': document.getElementById('chip-2xl').classList.contains('active') ? 1 : 0,
+                '3XL': document.getElementById('chip-3xl').classList.contains('active') ? 1 : 0,
+                OS:  document.getElementById('chip-os').classList.contains('active') ? 1 : 0
             };
             const files = document.getElementById('p-files').files;
             if(!name || files.length === 0) return alert("Faltan datos o fotos.");
