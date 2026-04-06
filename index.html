@@ -39,6 +39,13 @@
         /* --- AVISO PERSONALIZADO --- */
         #custom-announcement { background: #fdf2f4; color: var(--candy-sand); text-align: center; padding: 12px 20px; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; display: none; }
 
+        /* --- LOADING STATE --- */
+        #loading-state { text-align: center; padding: 60px 20px; color: #AAA; }
+        #loading-state .spinner { width: 40px; height: 40px; border: 3px solid #F0E6DB; border-top-color: var(--candy-sand); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #error-state { display: none; text-align: center; padding: 40px 20px; }
+        #error-state a { color: var(--candy-sand); font-weight: 700; }
+
         /* --- CATALOGO --- */
         .container { max-width: 1200px; margin: 20px auto; padding: 0 5%; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; }
@@ -49,8 +56,6 @@
 
         /* --- DETALLE --- */
         #detail-view { display: none; position: fixed; inset: 0; background: white; z-index: 2000; overflow-y: auto; padding: 30px 5%; }
-
-        /* ✅ MEJORA 3: Flechas del carrusel para PC */
         .carousel-wrapper { position: relative; width: 100%; max-width: 500px; margin: 0 auto; }
         .carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 15px; background: #f9f9f9; width: 100%; border: 1px solid #EEE; }
         .carousel-track::-webkit-scrollbar { display: none; }
@@ -64,7 +69,6 @@
             opacity: 0; pointer-events: none; line-height: 1;
             color: var(--candy-dark); font-family: inherit;
         }
-        /* Solo visible en desktop (hover) */
         @media (hover: hover) {
             .carousel-wrapper:hover .carousel-btn { opacity: 1; pointer-events: auto; }
         }
@@ -81,20 +85,14 @@
         .btn-buy { background: var(--candy-dark); color: white; border: none; padding: 18px; width: 100%; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 15px; transition: 0.3s; font-family: 'Montserrat'; letter-spacing: 1px; }
         .btn-buy:hover { background: var(--candy-sand); }
 
-        /* --- MODALES GENERALES --- */
+        /* --- MODALES --- */
         .modal { display: none; position: fixed; inset: 0; background: var(--candy-cream); z-index: 3000; padding: 30px; overflow-y: auto; }
         .modal-box { max-width: 700px; margin: 0 auto; background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
         .input-candy { width: 100%; padding: 12px; margin: 6px 0; border: 1px solid #EEE; border-radius: 10px; font-family: inherit; box-sizing: border-box; background: var(--gray-light); }
-        
-        /* Formulario de Edición Estético */
         .stock-form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; background: #FDF8F2; padding: 15px; border-radius: 15px; border: 1px solid #E6DED5; }
-
-        /* ✅ MEJORA 4: Etiquetas de talla en inputs de edición */
         .stock-input-wrap { display: flex; flex-direction: column; }
         .size-label { font-size: 0.65rem; font-weight: 800; color: var(--candy-sand); text-align: center; letter-spacing: 1.5px; margin-bottom: 2px; text-transform: uppercase; }
         .stock-input-wrap.full-width { grid-column: span 3; }
-
-        /* Lista de Gestión */
         .admin-item { background: #fafafa; border: 1px solid #eee; padding: 15px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
         .admin-item:hover { border-color: var(--candy-sand); background: white; }
         .admin-btns button { padding: 8px 14px; border-radius: 8px; border: 1px solid; cursor: pointer; font-size: 0.7rem; font-weight: 700; margin-left: 5px; background: white; transition: 0.2s; }
@@ -102,16 +100,16 @@
         .btn-edit:hover { background: var(--candy-sand); color: white; }
         .btn-del { color: var(--sale); border-color: var(--sale); }
         .btn-del:hover { background: var(--sale); color: white; }
-
-        /* ✅ MEJORA 2: Desglose del carrito */
         .bag-divider { border: none; border-top: 1px solid #EEE; margin: 10px 0; }
         .bag-row { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 4px 0; }
         .bag-row.shipping { color: #888; }
         .bag-row.total { font-weight: 700; font-size: 1rem; color: var(--candy-sand); padding-top: 8px; }
-
-        /* ✅ MEJORA 1: Botón "Seguir comprando" */
         .btn-keep-shopping { background: white; color: var(--candy-dark); border: 1.5px solid #DDD; padding: 15px; width: 100%; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; font-family: 'Montserrat'; letter-spacing: 1px; font-size: 0.85rem; }
         .btn-keep-shopping:hover { border-color: var(--candy-sand); color: var(--candy-sand); }
+
+        /* --- BANNER SHEETS --- */
+        #sheets-banner { background: #e8f5e9; border: 1px solid #c8e6c9; color: #2e7d32; text-align: center; padding: 10px 20px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.5px; display: none; }
+        #sheets-banner.error { background: #fff3e0; border-color: #ffe0b2; color: #e65100; }
 
         footer { text-align: center; padding: 50px; color: #DDD; font-size: 0.7rem; cursor: pointer; letter-spacing: 1px; }
     </style>
@@ -123,6 +121,9 @@
         <div style="cursor:pointer; font-weight:600; font-size:0.8rem; letter-spacing:1px;" onclick="openModal('cart-modal')">MY BAG 🛍️ <span id="b-count">0</span></div>
     </nav>
 
+    <!-- Banner de estado de Google Sheets -->
+    <div id="sheets-banner"></div>
+
     <div class="arrivals-section">
         <div class="arrivals-header">✨ Recién Agregados ✨</div>
         <div class="new-arrivals-bar" id="render-arrivals"></div>
@@ -130,12 +131,21 @@
     
     <div id="custom-announcement"></div>
 
-    <div class="container"><div class="grid" id="render-catalog"></div></div>
+    <div class="container">
+        <div id="loading-state">
+            <div class="spinner"></div>
+            <p style="font-size:0.8rem; letter-spacing:1px;">Cargando catálogo...</p>
+        </div>
+        <div id="error-state">
+            <p style="font-size:0.85rem; color:#AAA;">No se pudo cargar el catálogo desde Google Sheets.</p>
+            <p style="font-size:0.75rem; color:#BBB;">Usando catálogo local guardado.</p>
+        </div>
+        <div class="grid" id="render-catalog"></div>
+    </div>
 
     <div id="detail-view">
         <div style="cursor:pointer; font-weight:700; font-size:0.75rem; margin-bottom:25px; color:var(--candy-sand); letter-spacing:1px;" onclick="closeDetail()">← REGRESAR AL CATÁLOGO</div>
         <div style="display:flex; flex-wrap:wrap; gap:50px; justify-content:center;">
-            <!-- ✅ MEJORA 3: Wrapper con flechas -->
             <div style="width:100%; max-width:500px;">
                 <div class="carousel-wrapper">
                     <button class="carousel-btn carousel-btn-prev" onclick="navigateCarousel(-1)">&#8249;</button>
@@ -155,21 +165,39 @@
                 <span onclick="closeModal('admin-modal')" style="cursor:pointer; font-weight:bold; font-size:1.2rem;">X</span>
             </div>
 
+            <!-- Configuración Google Sheets -->
+            <div style="background:#e8f5e9; padding:20px; border-radius:18px; margin-bottom:20px; border:1px solid #c8e6c9;">
+                <p style="margin-top:0; font-size:0.85rem; font-weight:bold; letter-spacing:1px; color:#2e7d32;">🔗 Google Sheets — Catálogo en Vivo</p>
+                <p style="font-size:0.72rem; color:#555; margin:0 0 10px;">Pega el ID de tu Google Sheet. Cuando actualices la hoja, el catálogo se actualiza automáticamente.</p>
+                <input type="text" id="admin-sheet-id" class="input-candy" placeholder="ID del Google Sheet (ej: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms)">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:10px;">
+                    <button onclick="saveSheetConfig()" style="padding:12px; background:#2e7d32; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:700; font-family:inherit; letter-spacing:1px; font-size:0.75rem;">Guardar y Conectar</button>
+                    <button onclick="forceReloadFromSheets()" style="padding:12px; background:white; color:#2e7d32; border:1px solid #2e7d32; border-radius:10px; cursor:pointer; font-weight:700; font-family:inherit; letter-spacing:1px; font-size:0.75rem;">↻ Recargar Ahora</button>
+                </div>
+                <p style="font-size:0.65rem; color:#888; margin:10px 0 0;">
+                    📋 <b>Columnas requeridas en el Sheet:</b> nombre | precio | descuento | descripcion | imagenes | talla_s | talla_m | talla_l | talla_xl | talla_2xl | talla_3xl | talla_os | activo
+                </p>
+                <p style="font-size:0.65rem; color:#888; margin:5px 0 0;">
+                    🖼️ <b>Imágenes:</b> URLs separadas por coma (Imgur, Drive, Cloudinary, etc.)
+                </p>
+            </div>
+
             <div style="background:#fff9f9; padding:20px; border-radius:18px; margin-bottom:25px; border:1px solid #ffebeb;">
                 <p style="margin-top:0; font-size:0.8rem; font-weight:bold; letter-spacing:1px;">Texto de Aviso (Banner superior):</p>
                 <input type="text" id="admin-announcement" class="input-candy" placeholder="Ej: ¡Envíos gratis por compras sobre RD$3,000!">
                 <button onclick="saveAnnouncement()" style="padding:12px; background:var(--candy-sand); color:white; border:none; border-radius:10px; width:100%; cursor:pointer; font-weight:700; margin-top:10px; letter-spacing:1px;">Actualizar Aviso</button>
             </div>
-            
+
+            <!-- Agregar producto manual (respaldo cuando no hay Sheets) -->
             <div style="background:#fafafa; padding:25px; border-radius:20px; border:1px solid #EEE;">
-                <h3 style="margin-top:0; font-size:1rem; font-style:italic;">➕ Publicar Nuevo Bikini</h3>
+                <h3 style="margin-top:0; font-size:1rem; font-style:italic;">➕ Agregar Producto Manual (respaldo)</h3>
+                <p style="font-size:0.7rem; color:#AAA; margin-top:-10px;">Úsalo solo si no tienes Sheets configurado.</p>
                 <input type="text" id="p-name" class="input-candy" placeholder="Nombre (Ej: Bora Bora Set)">
                 <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
                     <input type="number" id="p-price" class="input-candy" placeholder="Precio (RD$)">
                     <input type="number" id="p-disc" class="input-candy" placeholder="% Dcto (Ej: 15)">
                 </div>
                 <textarea id="p-desc" class="input-candy" placeholder="Descripción breve..." style="height:60px;"></textarea>
-                
                 <p style="font-size:0.75rem; margin:15px 0 5px; color:var(--candy-sand); font-weight:bold; letter-spacing:1px;">Tallas disponibles:</p>
                 <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:8px; margin-top:5px; background:#FDF8F2; padding:12px; border-radius:15px; border:1px solid #E6DED5;">
                     <div class="size-chip" id="chip-s" onclick="toggleSizeChip('chip-s')">S</div>
@@ -180,7 +208,6 @@
                     <div class="size-chip" id="chip-3xl" onclick="toggleSizeChip('chip-3xl')">3XL</div>
                     <div class="size-chip full-width" id="chip-os" onclick="toggleSizeChip('chip-os')">ONE SIZE</div>
                 </div>
-                
                 <p style="font-size:0.75rem; margin-top:15px; font-weight:600;">Sube las fotos (puedes seleccionar varias):</p>
                 <input type="file" id="p-files" class="input-candy" multiple style="background:white; border:1px dashed #DDD;">
                 <button class="btn-buy" onclick="saveProduct()">Publicar en Catálogo</button>
@@ -196,57 +223,29 @@
                 <h2 id="edit-header-title" style="margin:0;">Editar Bikini</h2>
                 <span onclick="closeModal('edit-product-modal')" style="cursor:pointer; font-weight:bold; font-size:1.2rem;">X</span>
             </div>
-            
             <input type="text" id="edit-p-name" class="input-candy" placeholder="Nombre">
             <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
                 <input type="number" id="edit-p-price" class="input-candy" placeholder="Precio (RD$)">
                 <input type="number" id="edit-p-disc" class="input-candy" placeholder="% Dcto">
             </div>
             <textarea id="edit-p-desc" class="input-candy" placeholder="Descripción..."></textarea>
-            
             <p style="font-size:0.75rem; margin:15px 0 5px; color:var(--candy-sand); font-weight:bold;">Actualizar Inventario:</p>
-
-            <!-- ✅ MEJORA 4: Labels de talla visibles sobre cada input -->
             <div class="stock-form-grid" style="padding:10px; gap:8px;">
-                <div class="stock-input-wrap">
-                    <span class="size-label">S</span>
-                    <input type="number" id="edit-p-s" class="input-candy" placeholder="0" style="margin:0;">
-                </div>
-                <div class="stock-input-wrap">
-                    <span class="size-label">M</span>
-                    <input type="number" id="edit-p-m" class="input-candy" placeholder="0" style="margin:0;">
-                </div>
-                <div class="stock-input-wrap">
-                    <span class="size-label">L</span>
-                    <input type="number" id="edit-p-l" class="input-candy" placeholder="0" style="margin:0;">
-                </div>
-                <div class="stock-input-wrap">
-                    <span class="size-label">XL</span>
-                    <input type="number" id="edit-p-xl" class="input-candy" placeholder="0" style="margin:0;">
-                </div>
-                <div class="stock-input-wrap">
-                    <span class="size-label">2XL</span>
-                    <input type="number" id="edit-p-2xl" class="input-candy" placeholder="0" style="margin:0;">
-                </div>
-                <div class="stock-input-wrap">
-                    <span class="size-label">3XL</span>
-                    <input type="number" id="edit-p-3xl" class="input-candy" placeholder="0" style="margin:0;">
-                </div>
-                <div class="stock-input-wrap full-width">
-                    <span class="size-label">ONE SIZE</span>
-                    <input type="number" id="edit-p-os" class="input-candy" placeholder="0" style="margin:0; font-weight:700;">
-                </div>
+                <div class="stock-input-wrap"><span class="size-label">S</span><input type="number" id="edit-p-s" class="input-candy" placeholder="0" style="margin:0;"></div>
+                <div class="stock-input-wrap"><span class="size-label">M</span><input type="number" id="edit-p-m" class="input-candy" placeholder="0" style="margin:0;"></div>
+                <div class="stock-input-wrap"><span class="size-label">L</span><input type="number" id="edit-p-l" class="input-candy" placeholder="0" style="margin:0;"></div>
+                <div class="stock-input-wrap"><span class="size-label">XL</span><input type="number" id="edit-p-xl" class="input-candy" placeholder="0" style="margin:0;"></div>
+                <div class="stock-input-wrap"><span class="size-label">2XL</span><input type="number" id="edit-p-2xl" class="input-candy" placeholder="0" style="margin:0;"></div>
+                <div class="stock-input-wrap"><span class="size-label">3XL</span><input type="number" id="edit-p-3xl" class="input-candy" placeholder="0" style="margin:0;"></div>
+                <div class="stock-input-wrap full-width"><span class="size-label">ONE SIZE</span><input type="number" id="edit-p-os" class="input-candy" placeholder="0" style="margin:0; font-weight:700;"></div>
             </div>
-
             <p style="font-size:0.75rem; margin-top:20px; font-weight:600;">Actualizar Fotos (Si subes nuevas, reemplazarán las viejas):</p>
             <input type="file" id="edit-p-files" class="input-candy" multiple style="background:white; border:1px dashed #DDD;">
-            
             <button class="btn-buy" style="background:var(--candy-sand);" onclick="confirmSaveEdit()">Guardar Cambios</button>
             <button class="btn-buy" style="background:none; color:black; font-size:0.8rem; margin-top:5px;" onclick="closeModal('edit-product-modal')">Cancelar</button>
         </div>
     </div>
 
-    <!-- ✅ MEJORA 1 & 2: Carrito con "Seguir comprando" y desglose de artículos + envío -->
     <div id="cart-modal" class="modal">
         <div class="modal-box" style="max-width:450px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
@@ -270,27 +269,164 @@
     </footer>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('candy_v17')) || [];
-        if(db.length === 0) {
-            let backup = JSON.parse(localStorage.getItem('candy_v16'));
-            if(backup) { db = backup; localStorage.setItem('candy_v17', JSON.stringify(db)); }
-        }
+        // ============================================================
+        //  CONFIGURACIÓN — pon tu Sheet ID aquí o en el panel admin
+        // ============================================================
+        const DEFAULT_SHEET_ID = ""; // Puedes poner el ID directamente aquí
 
+        // ============================================================
+        //  ESTADO GLOBAL
+        // ============================================================
+        let db = [];
         let announcement = localStorage.getItem('candy_announcement') || "";
         let cart = [];
         let tempSize = "";
         let clicks = 0;
         let editingProductId = null;
-        let currentImgIndex = 0; // ✅ Para el carrusel con flechas
+        let currentImgIndex = 0;
+        let usingSheets = false;
 
-        function trySecret() { clicks++; if(clicks===3){ if(prompt("Candy Pass:")==="1234"){ openModal('admin-modal'); renderAdmin(); } clicks=0; } }
+        // ============================================================
+        //  GOOGLE SHEETS — CARGA EN VIVO
+        // ============================================================
+
+        function getSheetId() {
+            return localStorage.getItem('candy_sheet_id') || DEFAULT_SHEET_ID;
+        }
+
+        async function loadFromGoogleSheets(sheetId) {
+            const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const text = await res.text();
+
+            // Google devuelve JSONP, hay que limpiar el wrapper
+            const match = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/);
+            if (!match) throw new Error("Respuesta inesperada de Google Sheets");
+            const json = JSON.parse(match[1]);
+
+            if (!json.table || !json.table.rows) throw new Error("Sheet vacío o sin datos");
+
+            // Mapear columnas por nombre (insensible a mayúsculas/espacios)
+            const cols = json.table.cols.map(c => (c.label || "").toLowerCase().trim().replace(/\s+/g, "_"));
+
+            const productos = json.table.rows
+                .map((row, rowIdx) => {
+                    const get = (key) => {
+                        const idx = cols.indexOf(key);
+                        if (idx === -1) return "";
+                        const cell = row.c[idx];
+                        return cell && cell.v !== null ? cell.v : "";
+                    };
+
+                    const activo = String(get('activo')).toUpperCase();
+                    if (activo === 'FALSE' || activo === 'NO' || activo === '0') return null;
+
+                    const imagenesRaw = String(get('imagenes') || "");
+                    const imagenes = imagenesRaw.split(',').map(u => u.trim()).filter(Boolean);
+                    if (imagenes.length === 0) return null;
+
+                    const nombre = String(get('nombre') || "").trim();
+                    if (!nombre) return null;
+
+                    return {
+                        id: rowIdx + 1,
+                        name: nombre,
+                        price: parseFloat(get('precio')) || 0,
+                        disc: parseInt(get('descuento')) || 0,
+                        desc: String(get('descripcion') || ""),
+                        images: imagenes,
+                        stocks: {
+                            S:    parseInt(get('talla_s'))   || 0,
+                            M:    parseInt(get('talla_m'))   || 0,
+                            L:    parseInt(get('talla_l'))   || 0,
+                            XL:   parseInt(get('talla_xl'))  || 0,
+                            '2XL': parseInt(get('talla_2xl')) || 0,
+                            '3XL': parseInt(get('talla_3xl')) || 0,
+                            OS:   parseInt(get('talla_os'))  || 0
+                        },
+                        fromSheets: true
+                    };
+                })
+                .filter(Boolean);
+
+            return productos;
+        }
+
+        function showSheetsBanner(msg, isError = false) {
+            const b = document.getElementById('sheets-banner');
+            b.textContent = msg;
+            b.style.display = 'block';
+            b.className = isError ? 'error' : '';
+        }
+
+        async function initCatalog() {
+            const sheetId = getSheetId();
+            document.getElementById('loading-state').style.display = 'block';
+
+            if (sheetId) {
+                try {
+                    const productos = await loadFromGoogleSheets(sheetId);
+                    db = productos;
+                    usingSheets = true;
+                    // Guardar copia de respaldo en localStorage
+                    localStorage.setItem('candy_v17_sheets_backup', JSON.stringify(db));
+                    document.getElementById('loading-state').style.display = 'none';
+                    showSheetsBanner('✅ Catálogo cargado desde Google Sheets — Los cambios en la hoja se ven al recargar la página.');
+                } catch (err) {
+                    console.warn('Google Sheets error:', err);
+                    // Intentar respaldo
+                    const backup = JSON.parse(localStorage.getItem('candy_v17_sheets_backup') || localStorage.getItem('candy_v17') || '[]');
+                    db = backup;
+                    document.getElementById('loading-state').style.display = 'none';
+                    if (db.length > 0) {
+                        showSheetsBanner('⚠️ No se pudo conectar a Sheets. Mostrando catálogo guardado localmente.', true);
+                    } else {
+                        document.getElementById('error-state').style.display = 'block';
+                        showSheetsBanner('❌ Sin conexión a Sheets y sin catálogo local. Configura tu Sheet ID en el panel admin.', true);
+                    }
+                }
+            } else {
+                // Sin Sheets: usar localStorage normal
+                db = JSON.parse(localStorage.getItem('candy_v17') || '[]');
+                if (db.length === 0) {
+                    const backup = JSON.parse(localStorage.getItem('candy_v16') || '[]');
+                    if (backup.length) { db = backup; localStorage.setItem('candy_v17', JSON.stringify(db)); }
+                }
+                document.getElementById('loading-state').style.display = 'none';
+                if (db.length === 0) {
+                    showSheetsBanner('💡 Tip: Conecta un Google Sheet desde el panel admin para gestionar tu catálogo en vivo.', false);
+                }
+            }
+
+            renderAll();
+        }
+
+        function saveSheetConfig() {
+            const id = document.getElementById('admin-sheet-id').value.trim();
+            if (!id) return alert("Pega el ID del Google Sheet.");
+            localStorage.setItem('candy_sheet_id', id);
+            alert("¡Configuración guardada! Recargando catálogo...");
+            closeModal('admin-modal');
+            location.reload();
+        }
+
+        function forceReloadFromSheets() {
+            closeModal('admin-modal');
+            location.reload();
+        }
+
+        // ============================================================
+        //  FUNCIONES DE PANEL / UI
+        // ============================================================
+
+        function trySecret() { clicks++; if(clicks===3){ if(prompt("Candy Pass:")==="1234"){ openModal('admin-modal'); renderAdmin(); document.getElementById('admin-sheet-id').value = getSheetId(); } clicks=0; } }
         function openModal(id) { document.getElementById(id).style.display='block'; if(id==='cart-modal') renderBag(); }
         function closeModal(id) { document.getElementById(id).style.display='none'; }
         function closeDetail() { document.getElementById('detail-view').style.display='none'; }
 
         function saveAnnouncement() { localStorage.setItem('candy_announcement', document.getElementById('admin-announcement').value); location.reload(); }
 
-        // ✅ MEJORA 3: Navegar entre fotos con flechas en PC
         function navigateCarousel(dir) {
             const track = document.getElementById('track-imgs');
             const imgs = track.querySelectorAll('img');
@@ -304,100 +440,24 @@
             el.classList.toggle('active');
         }
 
-        // --- SUBIR PRODUCTO NUEVO ---
-        async function saveProduct() {
-            const name = document.getElementById('p-name').value;
-            const price = parseFloat(document.getElementById('p-price').value);
-            const stocks = { 
-                S:   document.getElementById('chip-s').classList.contains('active') ? 1 : 0,
-                M:   document.getElementById('chip-m').classList.contains('active') ? 1 : 0,
-                L:   document.getElementById('chip-l').classList.contains('active') ? 1 : 0,
-                XL:  document.getElementById('chip-xl').classList.contains('active') ? 1 : 0,
-                '2XL': document.getElementById('chip-2xl').classList.contains('active') ? 1 : 0,
-                '3XL': document.getElementById('chip-3xl').classList.contains('active') ? 1 : 0,
-                OS:  document.getElementById('chip-os').classList.contains('active') ? 1 : 0
-            };
-            const files = document.getElementById('p-files').files;
-            if(!name || files.length === 0) return alert("Faltan datos o fotos.");
-
-            const imgPromises = Array.from(files).map(f => new Promise(resolve => {
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.readAsDataURL(f);
-            }));
-
-            const images = await Promise.all(imgPromises);
-            db.unshift({ id: Date.now(), name, price, disc: parseInt(document.getElementById('p-disc').value)||0, desc: document.getElementById('p-desc').value, stocks, images });
-            saveDB('17'); location.reload();
-        }
-
-        // --- SISTEMA DE EDICIÓN ---
-        function openEditModal(id) {
-            const p = db.find(x => x.id === id);
-            editingProductId = id;
-            
-            document.getElementById('edit-header-title').innerText = `Editando: ${p.name}`;
-            document.getElementById('edit-p-name').value = p.name;
-            document.getElementById('edit-p-price').value = p.price;
-            document.getElementById('edit-p-disc').value = p.disc || 0;
-            document.getElementById('edit-p-desc').value = p.desc || "";
-            
-            document.getElementById('edit-p-s').value = p.stocks.S || 0;
-            document.getElementById('edit-p-m').value = p.stocks.M || 0;
-            document.getElementById('edit-p-l').value = p.stocks.L || 0;
-            document.getElementById('edit-p-xl').value = p.stocks.XL || 0;
-            document.getElementById('edit-p-2xl').value = p.stocks['2XL'] || 0;
-            document.getElementById('edit-p-3xl').value = p.stocks['3XL'] || 0;
-            document.getElementById('edit-p-os').value = p.stocks.OS || 0;
-            
-            document.getElementById('edit-p-files').value = "";
-
-            closeModal('admin-modal');
-            openModal('edit-product-modal');
-        }
-
-        async function confirmSaveEdit() {
-            if(!editingProductId) return;
-            const p = db.find(x => x.id === editingProductId);
-            
-            p.name = document.getElementById('edit-p-name').value;
-            p.price = parseFloat(document.getElementById('edit-p-price').value);
-            p.disc = parseInt(document.getElementById('edit-p-disc').value) || 0;
-            p.desc = document.getElementById('edit-p-desc').value;
-            
-            p.stocks = {
-                S: parseInt(document.getElementById('edit-p-s').value)||0, 
-                M: parseInt(document.getElementById('edit-p-m').value)||0, 
-                L: parseInt(document.getElementById('edit-p-l').value)||0,
-                XL: parseInt(document.getElementById('edit-p-xl').value)||0,
-                '2XL': parseInt(document.getElementById('edit-p-2xl').value)||0,
-                '3XL': parseInt(document.getElementById('edit-p-3xl').value)||0,
-                OS: parseInt(document.getElementById('edit-p-os').value)||0
-            };
-            
-            const files = document.getElementById('edit-p-files').files;
-            if(files.length > 0) {
-                const imgPromises = Array.from(files).map(f => new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => resolve(e.target.result);
-                    reader.readAsDataURL(f);
-                }));
-                p.images = await Promise.all(imgPromises);
-            }
-            
-            saveDB('17');
-            alert("¡Cambios guardados con éxito en Candy Swims!");
-            location.reload();
-        }
+        // ============================================================
+        //  RENDER
+        // ============================================================
 
         function renderAll() {
             const annEl = document.getElementById('custom-announcement');
             if(announcement) { annEl.innerText = announcement.toUpperCase(); annEl.style.display = 'block'; }
             if(document.getElementById('admin-announcement')) document.getElementById('admin-announcement').value = announcement;
-            
+
+            if (db.length === 0) {
+                document.getElementById('render-catalog').innerHTML = '';
+                document.getElementById('render-arrivals').innerHTML = '';
+                return;
+            }
+
             document.getElementById('render-arrivals').innerHTML = db.slice(0, 8).map(p => `
                 <div class="arrival-item" onclick="showProduct(${p.id})">
-                    <div class="ring"><img src="${p.images[0]}"></div>
+                    <div class="ring"><img src="${p.images[0]}" onerror="this.src='https://placehold.co/68x68/FDF8F2/D4A373?text=CS'"></div>
                     <p>${p.name}</p>
                 </div>`).join('');
 
@@ -405,7 +465,7 @@
                 const finalP = p.disc > 0 ? p.price * (1 - p.disc/100) : p.price;
                 return `<div class="card" onclick="showProduct(${p.id})">
                     ${p.disc > 0 ? `<div class="card-badge">-${p.disc}%</div>` : ''}
-                    <img src="${p.images[0]}" class="img-main">
+                    <img src="${p.images[0]}" class="img-main" onerror="this.src='https://placehold.co/400x500/FDF8F2/D4A373?text=Candy+Swims'">
                     <div style="padding:15px; text-align:center;">
                         <div style="font-family:'Playfair Display'; font-size:0.95rem;">${p.name}</div>
                         <div style="color:var(--candy-sand); font-weight:700;">RD$${finalP.toLocaleString()}</div>
@@ -416,21 +476,22 @@
 
         function showProduct(id) {
             const p = db.find(x => x.id === id);
+            if (!p) return;
             const finalP = p.disc > 0 ? p.price * (1 - p.disc/100) : p.price;
             tempSize = "";
-            currentImgIndex = 0; // Reset carrusel al abrir producto
+            currentImgIndex = 0;
 
-            document.getElementById('track-imgs').innerHTML = p.images.map(img => `<img src="${img}">`).join('');
+            document.getElementById('track-imgs').innerHTML = p.images.map(img => `<img src="${img}" onerror="this.src='https://placehold.co/400x500/FDF8F2/D4A373?text=Foto'>">`).join('');
             
             let sizeButtons = "";
-            if((p.stocks.OS || 0) > 0 && ((p.stocks.S||0) + (p.stocks.M||0) + (p.stocks.L||0) + (p.stocks.XL||0) + (p.stocks['2XL']||0) + (p.stocks['3XL']||0) === 0)) {
+            const hasOnlyOS = (p.stocks.OS || 0) > 0 && ((p.stocks.S||0) + (p.stocks.M||0) + (p.stocks.L||0) + (p.stocks.XL||0) + (p.stocks['2XL']||0) + (p.stocks['3XL']||0) === 0);
+            if (hasOnlyOS) {
                 sizeButtons = `<div class="size-chip full-width ${(p.stocks.OS || 0) <= 0 ? 'empty' : ''}" onclick="selectSize(this, 'One Size')">ONE SIZE</div>`;
             } else {
                 sizeButtons = ['S','M','L','XL','2XL','3XL'].map(s => {
                     const stockVal = p.stocks[s] || 0;
                     return `<div class="size-chip ${stockVal <= 0 ? 'empty' : ''}" onclick="${stockVal > 0 ? `selectSize(this, '${s}')` : ''}">${s}</div>`;
                 }).join('');
-                
                 if((p.stocks.OS || 0) > 0) {
                     sizeButtons += `<div class="size-chip full-width ${p.stocks.OS <= 0 ? 'empty' : ''}" onclick="selectSize(this, 'One Size')">ONE SIZE</div>`;
                 }
@@ -460,7 +521,6 @@
             closeDetail();
         }
 
-        // ✅ MEJORA 2: renderBag con desglose de artículos
         function renderBag() {
             const bagList = document.getElementById('bag-list');
             if(cart.length === 0) {
@@ -475,20 +535,15 @@
             updateTotal();
         }
 
-        // ✅ MEJORA 2: updateTotal muestra desglose subtotal + envío + total
         function updateTotal() {
             const sub = cart.reduce((a, b) => a + b.finalPrice, 0);
             const shipVal = parseInt(document.getElementById('ship-zone').value) || 0;
             const shipLabels = { 350: 'Santo Domingo', 750: 'Interior del país' };
-            
             let html = `<hr class="bag-divider">`;
             html += `<div class="bag-row"><span style="color:#888;">Subtotal</span><span>RD$${sub.toLocaleString()}</span></div>`;
-            if(shipVal > 0) {
-                html += `<div class="bag-row shipping"><span>Envío — ${shipLabels[shipVal]}</span><span>RD$${shipVal.toLocaleString()}</span></div>`;
-            }
+            if(shipVal > 0) html += `<div class="bag-row shipping"><span>Envío — ${shipLabels[shipVal]}</span><span>RD$${shipVal.toLocaleString()}</span></div>`;
             html += `<hr class="bag-divider">`;
             html += `<div class="bag-row total"><span>TOTAL</span><span>RD$${(sub + shipVal).toLocaleString()}</span></div>`;
-            
             document.getElementById('bag-totals').innerHTML = html;
         }
 
@@ -498,7 +553,6 @@
             const shipLabels = { 350: 'Santo Domingo', 750: 'Interior del país' };
             const sub = cart.reduce((a, b) => a + b.finalPrice, 0);
             const total = sub + shipVal;
-
             let text = "*ORDEN CANDY SWIMS virtual*\n\n";
             cart.forEach(i => text += `👙 ${i.name} [${i.size}] — RD$${i.finalPrice.toLocaleString()}\n`);
             text += `\n🚚 Envío (${shipLabels[shipVal]}): RD$${shipVal.toLocaleString()}`;
@@ -507,8 +561,19 @@
             location.reload();
         }
 
+        // ============================================================
+        //  ADMIN (solo para productos locales / respaldo)
+        // ============================================================
+
         function renderAdmin() {
-            document.getElementById('admin-list').innerHTML = `<h3 style="margin-top:30px; font-size:0.9rem;">Inventario Actual</h3>` + db.map(p => `
+            const sheetId = getSheetId();
+            const sourceNote = usingSheets
+                ? `<div style="background:#e8f5e9; padding:12px; border-radius:10px; font-size:0.72rem; color:#2e7d32; margin-bottom:15px;">
+                    🔗 Catálogo cargado desde Google Sheets. Para editar productos, actualiza tu hoja de cálculo directamente y recarga.
+                   </div>`
+                : '';
+
+            document.getElementById('admin-list').innerHTML = sourceNote + `<h3 style="margin-top:30px; font-size:0.9rem;">Inventario Actual ${usingSheets ? '(desde Sheets)' : '(local)'}</h3>` + db.map(p => `
                 <div class="admin-item">
                     <div style="font-size:0.65rem;">
                         <b>${p.name}</b><br>
@@ -516,8 +581,8 @@
                         2XL:${p.stocks['2XL']||0} 3XL:${p.stocks['3XL']||0} OS:${p.stocks.OS||0} | ${p.disc||0}% Dcto.
                     </div>
                     <div class="admin-btns">
-                        <button class="btn-edit" onclick="openEditModal(${p.id})">EDITAR</button>
-                        <button class="btn-del" onclick="delP(${p.id})">X</button>
+                        ${!usingSheets ? `<button class="btn-edit" onclick="openEditModal(${p.id})">EDITAR</button>` : ''}
+                        ${!usingSheets ? `<button class="btn-del" onclick="delP(${p.id})">X</button>` : ''}
                     </div>
                 </div>`).join('');
         }
@@ -525,7 +590,85 @@
         function delP(id) { if(confirm("¿Borrar Bikini?")) { db = db.filter(x => x.id !== id); saveDB('17'); renderAdmin(); renderAll(); } }
         function saveDB(v) { localStorage.setItem(`candy_v${v}`, JSON.stringify(db)); }
 
-        renderAll();
+        function openEditModal(id) {
+            const p = db.find(x => x.id === id);
+            editingProductId = id;
+            document.getElementById('edit-header-title').innerText = `Editando: ${p.name}`;
+            document.getElementById('edit-p-name').value = p.name;
+            document.getElementById('edit-p-price').value = p.price;
+            document.getElementById('edit-p-disc').value = p.disc || 0;
+            document.getElementById('edit-p-desc').value = p.desc || "";
+            document.getElementById('edit-p-s').value = p.stocks.S || 0;
+            document.getElementById('edit-p-m').value = p.stocks.M || 0;
+            document.getElementById('edit-p-l').value = p.stocks.L || 0;
+            document.getElementById('edit-p-xl').value = p.stocks.XL || 0;
+            document.getElementById('edit-p-2xl').value = p.stocks['2XL'] || 0;
+            document.getElementById('edit-p-3xl').value = p.stocks['3XL'] || 0;
+            document.getElementById('edit-p-os').value = p.stocks.OS || 0;
+            document.getElementById('edit-p-files').value = "";
+            closeModal('admin-modal');
+            openModal('edit-product-modal');
+        }
+
+        async function confirmSaveEdit() {
+            if(!editingProductId) return;
+            const p = db.find(x => x.id === editingProductId);
+            p.name = document.getElementById('edit-p-name').value;
+            p.price = parseFloat(document.getElementById('edit-p-price').value);
+            p.disc = parseInt(document.getElementById('edit-p-disc').value) || 0;
+            p.desc = document.getElementById('edit-p-desc').value;
+            p.stocks = {
+                S: parseInt(document.getElementById('edit-p-s').value)||0,
+                M: parseInt(document.getElementById('edit-p-m').value)||0,
+                L: parseInt(document.getElementById('edit-p-l').value)||0,
+                XL: parseInt(document.getElementById('edit-p-xl').value)||0,
+                '2XL': parseInt(document.getElementById('edit-p-2xl').value)||0,
+                '3XL': parseInt(document.getElementById('edit-p-3xl').value)||0,
+                OS: parseInt(document.getElementById('edit-p-os').value)||0
+            };
+            const files = document.getElementById('edit-p-files').files;
+            if(files.length > 0) {
+                const imgPromises = Array.from(files).map(f => new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(f);
+                }));
+                p.images = await Promise.all(imgPromises);
+            }
+            saveDB('17');
+            alert("¡Cambios guardados con éxito en Candy Swims!");
+            location.reload();
+        }
+
+        async function saveProduct() {
+            const name = document.getElementById('p-name').value;
+            const price = parseFloat(document.getElementById('p-price').value);
+            const stocks = {
+                S:   document.getElementById('chip-s').classList.contains('active') ? 1 : 0,
+                M:   document.getElementById('chip-m').classList.contains('active') ? 1 : 0,
+                L:   document.getElementById('chip-l').classList.contains('active') ? 1 : 0,
+                XL:  document.getElementById('chip-xl').classList.contains('active') ? 1 : 0,
+                '2XL': document.getElementById('chip-2xl').classList.contains('active') ? 1 : 0,
+                '3XL': document.getElementById('chip-3xl').classList.contains('active') ? 1 : 0,
+                OS:  document.getElementById('chip-os').classList.contains('active') ? 1 : 0
+            };
+            const files = document.getElementById('p-files').files;
+            if(!name || files.length === 0) return alert("Faltan datos o fotos.");
+            const imgPromises = Array.from(files).map(f => new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.readAsDataURL(f);
+            }));
+            const images = await Promise.all(imgPromises);
+            db.unshift({ id: Date.now(), name, price, disc: parseInt(document.getElementById('p-disc').value)||0, desc: document.getElementById('p-desc').value, stocks, images });
+            saveDB('17');
+            location.reload();
+        }
+
+        // ============================================================
+        //  ARRANQUE
+        // ============================================================
+        initCatalog();
     </script>
 </body>
 </html>
