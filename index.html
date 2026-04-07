@@ -190,9 +190,9 @@
 
         <!-- TABS -->
         <div class="admin-tabs">
-            <button class="admin-tab active" onclick="switchTab('tab-inv')">📦 Inventario</button>
-            <button class="admin-tab" onclick="switchTab('tab-add')">➕ Nuevo Producto</button>
-            <button class="admin-tab" onclick="switchTab('tab-config')">⚙️ Configuración</button>
+            <button class="admin-tab active" onclick="switchTab('tab-inv',this)">📦 Inventario</button>
+            <button class="admin-tab" onclick="switchTab('tab-add',this)">➕ Nuevo Producto</button>
+            <button class="admin-tab" onclick="switchTab('tab-config',this)">⚙️ Configuración</button>
         </div>
 
         <!-- TAB: INVENTARIO -->
@@ -533,11 +533,12 @@
     // ============================================================
     //  ADMIN — INVENTARIO
     // ============================================================
-    function switchTab(tabId) {
+    function switchTab(tabId, triggerEl) {
         document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
-        event.target.classList.add('active');
+        const btn = triggerEl || document.querySelector(`.admin-tab[onclick*="${tabId}"]`);
+        if (btn) btn.classList.add('active');
         if (tabId === 'tab-inv') renderInventoryTable();
     }
 
