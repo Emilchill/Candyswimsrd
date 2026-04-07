@@ -329,6 +329,7 @@
     //  FIREBASE CONFIG
     // ============================================================
     const FB_URL = "https://candyswimsbd-default-rtdb.firebaseio.com/productos.json";
+    const FB_CONFIG_URL = "https://candyswimsbd-default-rtdb.firebaseio.com/config.json";
 
     // ============================================================
     //  ESTADO GLOBAL
@@ -339,7 +340,7 @@
     let clicks = 0;
     let editingId = null;
     let currentImgIndex = 0;
-    let announcement = localStorage.getItem('candy_announcement') || "";
+    let announcement = "";
 
     // ============================================================
     //  FIREBASE API
@@ -349,6 +350,25 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         return Array.isArray(data) ? data : [];
+    }
+
+    async function loadConfig() {
+        try {
+            const res = await fetch(FB_CONFIG_URL);
+            if (!res.ok) return {};
+            const data = await res.json();
+            return data || {};
+        } catch(e) { return {}; }
+    }
+
+    async function saveConfig(cfg) {
+        const res = await fetch(FB_CONFIG_URL, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cfg)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
     }
 
     async function saveToJSONBin(productos) {
@@ -373,11 +393,17 @@
     async function reloadCatalog() {
         showStatus('🔄 Sincronizando...');
         try {
-            db = await loadFromJSONBin();
+            const [productos, cfg] = await Promise.all([loadFromJSONBin(), loadConfig()]);
+            db = productos;
+            announcement = cfg.announcement || "";
             localStorage.setItem('candy_backup', JSON.stringify(db));
+            localStorage.setItem('candy_config_backup', JSON.stringify(cfg));
             renderAll();
             const adminOpen = document.getElementById('admin-modal').style.display === 'block';
-            if (adminOpen) renderInventoryTable();
+            if (adminOpen) {
+                renderInventoryTable();
+                document.getElementById('admin-announcement').value = announcement;
+            }
             showStatus('✅ Catálogo actualizado');
         } catch(e) {
             showStatus('⚠️ Error al sincronizar: ' + e.message, true);
@@ -387,11 +413,16 @@
     async function initCatalog() {
         document.getElementById('loading-state').style.display = 'block';
         try {
-            db = await loadFromJSONBin();
+            const [productos, cfg] = await Promise.all([loadFromJSONBin(), loadConfig()]);
+            db = productos;
+            announcement = cfg.announcement || "";
             localStorage.setItem('candy_backup', JSON.stringify(db));
+            localStorage.setItem('candy_config_backup', JSON.stringify(cfg));
             document.getElementById('loading-state').style.display = 'none';
         } catch (err) {
             db = JSON.parse(localStorage.getItem('candy_backup') || '[]');
+            const cfgBackup = JSON.parse(localStorage.getItem('candy_config_backup') || '{}');
+            announcement = cfgBackup.announcement || "";
             document.getElementById('loading-state').style.display = 'none';
             if (db.length === 0) showStatus('Sin conexión y sin catálogo guardado.', true);
             else showStatus('Sin conexión — mostrando catálogo guardado.', true);
@@ -736,10 +767,20 @@
         })));
     }
 
-    function saveAnnouncement() {
-        announcement = document.getElementById('admin-announcement').value;
-        localStorage.setItem('candy_announcement', announcement);
-        location.reload();
+    async function saveAnnouncement() {
+        const text = document.getElementById('admin-announcement').value;
+        try {
+            showStatus('Guardando aviso...');
+            const cfg = await loadConfig();
+            cfg.announcement = text;
+            await saveConfig(cfg);
+            announcement = text;
+            localStorage.setItem('candy_config_backup', JSON.stringify(cfg));
+            renderAll();
+            showStatus('✅ Aviso actualizado');
+        } catch(e) {
+            showStatus('❌ Error al guardar aviso: ' + e.message, true);
+        }
     }
 
     function trySecret() {
