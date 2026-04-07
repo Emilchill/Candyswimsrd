@@ -326,11 +326,9 @@
 
 <script>
     // ============================================================
-    //  JSONBIN CONFIG
+    //  FIREBASE CONFIG
     // ============================================================
-    const BIN_ID  = "69d478efaaba882197cfee44";
-    const API_KEY = "$2a$10$YfN4W5e4kioQKkWTqvklMOrKIsQ4D9VuKtHpMEI/TXZw9cDXLwrIm";
-    const BIN_URL = "https://api.jsonbin.io/v3/b/" + BIN_ID;
+    const FB_URL = "https://candyswimsbd-default-rtdb.firebaseio.com/productos.json";
 
     // ============================================================
     //  ESTADO GLOBAL
@@ -344,28 +342,22 @@
     let announcement = localStorage.getItem('candy_announcement') || "";
 
     // ============================================================
-    //  JSONBIN API
+    //  FIREBASE API
     // ============================================================
     async function loadFromJSONBin() {
-        const res = await fetch(BIN_URL + '/latest');
-        if (!res.ok) {
-            const msgs = { 401:'API Key inválida (401)', 403:'Sin acceso al bin (403)', 404:'Bin no encontrado (404)', 429:'Límite de requests alcanzado (429)' };
-            throw new Error(msgs[res.status] || 'HTTP ' + res.status);
-        }
+        const res = await fetch(FB_URL);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
-        return Array.isArray(data.record) ? data.record : [];
+        return Array.isArray(data) ? data : [];
     }
 
     async function saveToJSONBin(productos) {
-        const res = await fetch(BIN_URL, {
+        const res = await fetch(FB_URL, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(productos)
         });
-        if (!res.ok) {
-            const msgs = { 401:'API Key inválida (401)', 403:'Sin acceso al bin (403)', 404:'Bin no encontrado (404)', 429:'Límite de requests alcanzado (429)' };
-            throw new Error(msgs[res.status] || 'HTTP ' + res.status);
-        }
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
     }
 
