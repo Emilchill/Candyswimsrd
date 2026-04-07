@@ -371,6 +371,21 @@
         if (!isError) setTimeout(() => b.style.display = 'none', 3000);
     }
 
+    // Re-sincroniza con JSONBin y re-renderiza todo
+    async function reloadCatalog() {
+        showStatus('🔄 Sincronizando...');
+        try {
+            db = await loadFromJSONBin();
+            localStorage.setItem('candy_backup', JSON.stringify(db));
+            renderAll();
+            const adminOpen = document.getElementById('admin-modal').style.display === 'block';
+            if (adminOpen) renderInventoryTable();
+            showStatus('✅ Catálogo actualizado');
+        } catch(e) {
+            showStatus('⚠️ Error al sincronizar: ' + e.message, true);
+        }
+    }
+
     async function initCatalog() {
         document.getElementById('loading-state').style.display = 'block';
         try {
@@ -590,10 +605,8 @@
         try {
             showStatus('Guardando...');
             await saveToJSONBin(db);
-            localStorage.setItem('candy_backup', JSON.stringify(db));
+            await reloadCatalog();
             showStatus('✅ Inventario guardado');
-            renderInventoryTable();
-            renderAll();
         } catch(e) { showStatus('❌ Error guardando: ' + e.message, true); }
     }
 
@@ -602,20 +615,22 @@
         db = db.filter(x => x.id !== id);
         try {
             await saveToJSONBin(db);
-            localStorage.setItem('candy_backup', JSON.stringify(db));
-            renderInventoryTable(); renderAll();
+            await reloadCatalog();
             showStatus('Producto eliminado.');
         } catch(e) { showStatus('Error al eliminar.', true); }
     }
 
     async function clearAll() {
         if (!confirm("¿Borrar TODOS los productos? Esta acción no se puede deshacer.")) return;
-        db = [];
         try {
-            await saveToJSONBin(db);
-            localStorage.setItem('candy_backup', JSON.stringify(db));
-            renderInventoryTable(); renderAll();
-        } catch(e) { showStatus('Error.', true); }
+            showStatus('Borrando todo el catálogo...');
+            await saveToJSONBin([]);
+            db = [];
+            localStorage.removeItem('candy_backup');
+            renderInventoryTable();
+            renderAll();
+            showStatus('✅ Catálogo borrado completamente.');
+        } catch(e) { showStatus('❌ Error al borrar: ' + e.message, true); }
     }
 
     // ============================================================
@@ -665,10 +680,9 @@
         try {
             showStatus('Guardando...');
             await saveToJSONBin(db);
-            localStorage.setItem('candy_backup', JSON.stringify(db));
-            showStatus('✅ Cambios guardados');
             closeModal('edit-modal');
-            renderInventoryTable(); renderAll();
+            await reloadCatalog();
+            showStatus('✅ Cambios guardados');
         } catch(e) { showStatus('❌ Error: ' + e.message, true); }
     }
 
@@ -702,13 +716,12 @@
         try {
             showStatus('Publicando...');
             await saveToJSONBin(db);
-            localStorage.setItem('candy_backup', JSON.stringify(db));
             showStatus('✅ Producto publicado');
             // Reset form
             ['p-name','p-price','p-disc','p-desc','p-img-urls'].forEach(id => document.getElementById(id).value='');
             ['qty-s','qty-m','qty-l','qty-xl','qty-2xl','qty-3xl','qty-os'].forEach(id => document.getElementById(id).value='0');
             switchTab('tab-inv');
-            renderAll();
+            await reloadCatalog();
         } catch(e) { showStatus('❌ Error: ' + e.message, true); }
     }
 
