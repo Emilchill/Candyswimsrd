@@ -148,7 +148,19 @@
 
 <nav>
     <div class="logo" onclick="location.reload()">Candy Swims</div>
-    <div style="cursor:pointer;font-weight:600;font-size:0.8rem;letter-spacing:1px;" onclick="openModal('cart-modal')">MY BAG 🛍️ <span id="b-count">0</span></div>
+    <div style="display:flex;align-items:center;gap:14px;">
+        <a href="https://www.instagram.com/candyswims.rd" target="_blank" rel="noopener" aria-label="Instagram" style="display:flex;align-items:center;color:var(--dark);transition:0.2s;" onmouseover="this.style.color='#C13584'" onmouseout="this.style.color='var(--dark)'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://wa.me/18298559408" target="_blank" rel="noopener" aria-label="WhatsApp" style="display:flex;align-items:center;color:var(--dark);transition:0.2s;" onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='var(--dark)'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </a>
+        <div style="cursor:pointer;font-weight:600;font-size:0.8rem;letter-spacing:1px;" onclick="openModal('cart-modal')">MY BAG 🛍️ <span id="b-count">0</span></div>
+        <div id="admin-login-btn" onclick="handleAdminClick()" title="Admin" style="position:relative;display:flex;align-items:center;cursor:pointer;color:#CCC;transition:0.2s;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <div id="session-dot" style="display:none;position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:#2e7d32;border:1.5px solid white;"></div>
+        </div>
+    </div>
 </nav>
 
 <div id="status-bar"></div>
@@ -262,6 +274,12 @@
                 <input type="text" id="admin-announcement" class="input-candy" placeholder="Ej: ¡Envíos gratis por compras sobre RD$3,000!">
                 <button onclick="saveAnnouncement()" style="margin-top:10px;padding:12px 20px;background:var(--sand);color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-family:inherit;letter-spacing:1px;width:100%;">Actualizar Aviso</button>
             </div>
+            <div class="form-section">
+                <h3 style="margin-top:0;font-size:1rem;">🔑 Cambiar contraseña de acceso</h3>
+                <input type="password" id="cfg-pass-new" class="input-candy" placeholder="Nueva contraseña">
+                <input type="password" id="cfg-pass-confirm" class="input-candy" placeholder="Confirmar contraseña">
+                <button onclick="changeAdminPass()" style="margin-top:10px;padding:12px 20px;background:var(--dark);color:white;border:none;border-radius:10px;cursor:pointer;font-weight:700;font-family:inherit;letter-spacing:1px;width:100%;">Guardar nueva contraseña</button>
+            </div>
             <div class="form-section" style="background:#fff9f9;border-color:#ffebeb;">
                 <h3 style="margin-top:0;font-size:1rem;color:var(--sale);">⚠️ Zona de peligro</h3>
                 <p style="font-size:0.75rem;color:#888;">Borrar todos los productos del catálogo. Esta acción no se puede deshacer.</p>
@@ -322,7 +340,34 @@
     </div>
 </div>
 
-<footer onclick="trySecret()">CANDYSWIMS.RD — Boutique Virtual — 2026</footer>
+<!-- LOGIN MODAL -->
+<div class="modal" id="login-modal" style="background:rgba(0,0,0,0.45);display:none;">
+    <div class="modal-box" style="max-width:360px;margin-top:15vh;text-align:center;padding:40px 35px;">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--cream);border:1.5px solid #F0E6DB;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--sand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <h2 style="margin:0 0 6px;font-size:1.4rem;">Acceso Admin</h2>
+        <p style="font-size:0.72rem;color:#AAA;margin:0 0 24px;letter-spacing:0.5px;">Ingresa tu contraseña para continuar</p>
+        <input type="password" id="login-pass" class="input-candy" placeholder="Contraseña" style="text-align:center;letter-spacing:2px;font-size:1rem;" onkeydown="if(event.key==='Enter')doLogin()">
+        <div id="login-error" style="color:var(--sale);font-size:0.72rem;margin:8px 0 0;min-height:18px;font-weight:600;"></div>
+        <button class="btn-buy" onclick="doLogin()" style="margin-top:16px;">ENTRAR</button>
+        <button class="btn-keep-shopping" onclick="closeModal('login-modal')" style="margin-top:8px;font-size:0.78rem;">Cancelar</button>
+    </div>
+</div>
+
+<!-- SESSION MENU (logout popup) -->
+<div id="session-menu" style="display:none;position:fixed;top:58px;right:calc(8% + 0px);background:white;border:1px solid #F0E6DB;border-radius:14px;padding:8px;z-index:9000;box-shadow:0 8px 30px rgba(0,0,0,0.1);min-width:180px;">
+    <div style="padding:10px 12px;font-size:0.7rem;color:#AAA;letter-spacing:1px;border-bottom:1px solid #F5F5F5;margin-bottom:4px;">SESIÓN ACTIVA</div>
+    <div id="session-timer-label" style="padding:6px 12px;font-size:0.75rem;color:var(--green);font-weight:700;"></div>
+    <button onclick="openAdminPanel()" style="width:100%;padding:10px 12px;border:none;background:none;text-align:left;font-family:inherit;font-size:0.78rem;font-weight:600;cursor:pointer;border-radius:8px;transition:0.15s;" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='none'">
+        ⚙️ Panel de administración
+    </button>
+    <button onclick="doLogout()" style="width:100%;padding:10px 12px;border:none;background:none;text-align:left;font-family:inherit;font-size:0.78rem;font-weight:600;cursor:pointer;color:var(--sale);border-radius:8px;transition:0.15s;" onmouseover="this.style.background='#fff5f5'" onmouseout="this.style.background='none'">
+        🔒 Cerrar sesión
+    </button>
+</div>
+
+<footer>CANDYSWIMS.RD — Boutique Virtual — 2026</footer>
 
 <script>
     // ============================================================
@@ -337,7 +382,6 @@
     let db = [];
     let cart = [];
     let tempSize = "";
-    let clicks = 0;
     let editingId = null;
     let currentImgIndex = 0;
     let announcement = "";
@@ -783,16 +827,144 @@
         }
     }
 
-    function trySecret() {
-        clicks++;
-        if (clicks === 3) {
-            if (prompt("Candy Pass:") === "crislolo04") {
-                openModal('admin-modal');
-                renderInventoryTable();
-                document.getElementById('admin-announcement').value = announcement;
-            }
-            clicks = 0;
+    const SESSION_KEY = 'candy_admin_session';
+    const SESSION_DURATION = 30 * 60 * 1000;
+    let sessionTimer = null;
+    let timerInterval = null;
+
+    function isSessionValid() {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return false;
+        try { return Date.now() < JSON.parse(raw).expiry; } catch(e) { return false; }
+    }
+
+    function startSession() {
+        const expiry = Date.now() + SESSION_DURATION;
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ expiry }));
+        scheduleSessionExpiry(SESSION_DURATION);
+        updateLoginIcon();
+        startTimerLabel();
+    }
+
+    function clearSession() {
+        localStorage.removeItem(SESSION_KEY);
+        if (sessionTimer) clearTimeout(sessionTimer);
+        if (timerInterval) clearInterval(timerInterval);
+        sessionTimer = null; timerInterval = null;
+        closeModal('admin-modal');
+        document.getElementById('session-menu').style.display = 'none';
+        updateLoginIcon();
+        showStatus('🔒 Sesión cerrada', true);
+    }
+
+    function scheduleSessionExpiry(msLeft) {
+        if (sessionTimer) clearTimeout(sessionTimer);
+        sessionTimer = setTimeout(clearSession, msLeft);
+    }
+
+    function updateLoginIcon() {
+        const btn = document.getElementById('admin-login-btn');
+        const dot = document.getElementById('session-dot');
+        if (isSessionValid()) {
+            btn.style.color = 'var(--sand)';
+            dot.style.display = 'block';
+        } else {
+            btn.style.color = '#CCC';
+            dot.style.display = 'none';
         }
+    }
+
+    function startTimerLabel() {
+        if (timerInterval) clearInterval(timerInterval);
+        function tick() {
+            const raw = localStorage.getItem(SESSION_KEY);
+            if (!raw) return;
+            const msLeft = JSON.parse(raw).expiry - Date.now();
+            if (msLeft <= 0) return;
+            const m = Math.floor(msLeft / 60000);
+            const s = Math.floor((msLeft % 60000) / 1000);
+            const el = document.getElementById('session-timer-label');
+            if (el) el.textContent = `⏱ Expira en ${m}:${s.toString().padStart(2,'0')}`;
+        }
+        tick();
+        timerInterval = setInterval(tick, 1000);
+    }
+
+    function handleAdminClick() {
+        if (isSessionValid()) {
+            const menu = document.getElementById('session-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            if (menu.style.display === 'block') startTimerLabel();
+        } else {
+            document.getElementById('login-pass').value = '';
+            document.getElementById('login-error').textContent = '';
+            openModal('login-modal');
+            setTimeout(() => document.getElementById('login-pass').focus(), 100);
+        }
+    }
+
+    // Cerrar session-menu al clicar fuera
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('session-menu');
+        const btn = document.getElementById('admin-login-btn');
+        if (menu.style.display === 'block' && !menu.contains(e.target) && !btn.contains(e.target)) {
+            menu.style.display = 'none';
+        }
+    });
+
+    async function doLogin() {
+        const pass = document.getElementById('login-pass').value;
+        const errEl = document.getElementById('login-error');
+        if (!pass) { errEl.textContent = 'Ingresa la contraseña'; return; }
+        errEl.textContent = '';
+        const btn = document.querySelector('#login-modal .btn-buy');
+        btn.textContent = 'Verificando...'; btn.disabled = true;
+        try {
+            const cfg = await loadConfig();
+            const correctPass = cfg.adminPass || 'crislolo04';
+            if (pass === correctPass) {
+                startSession();
+                closeModal('login-modal');
+                openAdminPanel();
+            } else {
+                errEl.textContent = '❌ Contraseña incorrecta';
+                document.getElementById('login-pass').value = '';
+                document.getElementById('login-pass').focus();
+            }
+        } catch(e) {
+            errEl.textContent = '⚠️ Error de conexión. Intenta de nuevo.';
+        }
+        btn.textContent = 'ENTRAR'; btn.disabled = false;
+    }
+
+    function openAdminPanel() {
+        document.getElementById('session-menu').style.display = 'none';
+        openModal('admin-modal');
+        renderInventoryTable();
+        document.getElementById('admin-announcement').value = announcement;
+    }
+
+    async function changeAdminPass() {
+        const np = document.getElementById('cfg-pass-new').value.trim();
+        const cp = document.getElementById('cfg-pass-confirm').value.trim();
+        if (!np) { showStatus('⚠️ Escribe la nueva contraseña.', true); return; }
+        if (np !== cp) { showStatus('⚠️ Las contraseñas no coinciden.', true); return; }
+        if (np.length < 6) { showStatus('⚠️ La contraseña debe tener al menos 6 caracteres.', true); return; }
+        try {
+            showStatus('Guardando contraseña...');
+            const cfg = await loadConfig();
+            cfg.adminPass = np;
+            await saveConfig(cfg);
+            document.getElementById('cfg-pass-new').value = '';
+            document.getElementById('cfg-pass-confirm').value = '';
+            showStatus('✅ Contraseña actualizada correctamente');
+        } catch(e) {
+            showStatus('❌ Error al guardar: ' + e.message, true);
+        }
+    }
+
+    function doLogout() {
+        if (confirm('¿Cerrar sesión de administración?')) clearSession();
     }
 
     function openModal(id) { document.getElementById(id).style.display = 'block'; if (id==='cart-modal') renderBag(); }
@@ -810,6 +982,13 @@
     // ============================================================
     //  ARRANQUE
     // ============================================================
+    if (isSessionValid()) {
+        const raw = localStorage.getItem(SESSION_KEY);
+        const { expiry } = JSON.parse(raw);
+        scheduleSessionExpiry(expiry - Date.now());
+        updateLoginIcon();
+        startTimerLabel();
+    }
     initCatalog();
 </script>
 </body>
