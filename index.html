@@ -176,7 +176,6 @@
     <div class="grid" id="render-catalog"></div>
 </div>
 
-<!-- DETAIL VIEW -->
 <div id="detail-view">
     <div style="cursor:pointer;font-weight:700;font-size:0.75rem;margin-bottom:25px;color:var(--sand);letter-spacing:1px;" onclick="closeDetail()">← REGRESAR AL CATÁLOGO</div>
     <div style="display:flex;flex-wrap:wrap;gap:50px;justify-content:center;">
@@ -192,7 +191,6 @@
     </div>
 </div>
 
-<!-- ADMIN MODAL -->
 <div class="modal" id="admin-modal">
     <div class="modal-box" style="max-width:900px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
@@ -200,14 +198,12 @@
             <span onclick="closeModal('admin-modal')" style="cursor:pointer;font-weight:bold;font-size:1.4rem;color:#AAA;">✕</span>
         </div>
 
-        <!-- TABS -->
         <div class="admin-tabs">
             <button class="admin-tab active" onclick="switchTab('tab-inv',this)">📦 Inventario</button>
             <button class="admin-tab" onclick="switchTab('tab-add',this)">➕ Nuevo Producto</button>
             <button class="admin-tab" onclick="switchTab('tab-config',this)">⚙️ Configuración</button>
         </div>
 
-        <!-- TAB: INVENTARIO -->
         <div class="admin-panel active" id="tab-inv">
             <div class="inv-summary" id="inv-summary"></div>
 
@@ -231,7 +227,6 @@
             </div>
         </div>
 
-        <!-- TAB: NUEVO PRODUCTO -->
         <div class="admin-panel" id="tab-add">
             <div class="form-section">
                 <h3 style="margin-top:0;font-size:1rem;">Datos del producto</h3>
@@ -267,7 +262,6 @@
             <button class="btn-buy" onclick="saveProduct()" style="letter-spacing:2px;">PUBLICAR EN CATÁLOGO</button>
         </div>
 
-        <!-- TAB: CONFIGURACIÓN -->
         <div class="admin-panel" id="tab-config">
             <div class="form-section">
                 <h3 style="margin-top:0;font-size:1rem;">📢 Banner de aviso</h3>
@@ -289,7 +283,6 @@
     </div>
 </div>
 
-<!-- EDIT PRODUCT MODAL -->
 <div class="modal" id="edit-modal" style="background:rgba(0,0,0,0.5);">
     <div class="modal-box" style="margin-top:40px;max-width:600px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
@@ -321,7 +314,6 @@
     </div>
 </div>
 
-<!-- CART MODAL -->
 <div id="cart-modal" class="modal">
     <div class="modal-box" style="max-width:450px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
@@ -336,11 +328,10 @@
         </select>
         <div id="bag-totals"></div>
         <button class="btn-keep-shopping" onclick="closeModal('cart-modal')">← Seguir comprando</button>
-        <button class="btn-buy" style="background:#25D366;margin-top:10px;" onclick="orderWA()">📱 Pedir vía WhatsApp</button>
+        <button id="btn-checkout-wa" class="btn-buy" style="background:#25D366;margin-top:10px;" onclick="orderWA()">📱 Pedir vía WhatsApp</button>
     </div>
 </div>
 
-<!-- LOGIN MODAL -->
 <div class="modal" id="login-modal" style="background:rgba(0,0,0,0.45);display:none;">
     <div class="modal-box" style="max-width:360px;margin-top:15vh;text-align:center;padding:40px 35px;">
         <div style="width:56px;height:56px;border-radius:50%;background:var(--cream);border:1.5px solid #F0E6DB;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
@@ -355,7 +346,6 @@
     </div>
 </div>
 
-<!-- SESSION MENU (logout popup) -->
 <div id="session-menu" style="display:none;position:fixed;top:58px;right:calc(8% + 0px);background:white;border:1px solid #F0E6DB;border-radius:14px;padding:8px;z-index:9000;box-shadow:0 8px 30px rgba(0,0,0,0.1);min-width:180px;">
     <div style="padding:10px 12px;font-size:0.7rem;color:#AAA;letter-spacing:1px;border-bottom:1px solid #F5F5F5;margin-bottom:4px;">SESIÓN ACTIVA</div>
     <div id="session-timer-label" style="padding:6px 12px;font-size:0.75rem;color:var(--green);font-weight:700;"></div>
@@ -570,6 +560,19 @@
                         <span onclick="removeFromBag(${i})" style="cursor:pointer;color:#CCC;font-size:0.8rem;">✕</span>
                     </div>
                 </div>`).join('');
+        
+        // Deshabilitar botón si el carrito está vacío
+        const btnPedir = document.getElementById('btn-checkout-wa');
+        if (cart.length === 0) {
+            btnPedir.disabled = true;
+            btnPedir.style.opacity = '0.5';
+            btnPedir.style.cursor = 'not-allowed';
+        } else {
+            btnPedir.disabled = false;
+            btnPedir.style.opacity = '1';
+            btnPedir.style.cursor = 'pointer';
+        }
+
         updateTotal();
     }
 
@@ -591,6 +594,11 @@
     }
 
     function orderWA() {
+        if (cart.length === 0) {
+            alert("⚠️ Debes agregar al menos 1 producto a tu bag para hacer el pedido.");
+            return;
+        }
+        
         const shipVal = parseInt(document.getElementById('ship-zone').value) || 0;
         if (shipVal === 0) return alert("Elige zona de envío");
         const shipLabels = { 350:'Santo Domingo', 750:'Interior del país' };
